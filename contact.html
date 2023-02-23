@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JW4NBXTL3R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-JW4NBXTL3R');
+</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <title>AUTOGENER8 | Contact</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="wrapper site-header__wrapper container">
+            <a href="#" class="brand">AUTOGENER8<span>.</span></a>
+            <nav class="nav">
+                <button class="nav__toggle" aria-expanded="false" type="button">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <ul class="nav__wrapper">
+                    <li class="nav__item"><a href="https://autogener8.com/">Home</a></li>
+                    <li class="nav__item"><a href="https://autogener8.com/about/">About</a></li>  
+                    <li class="nav__item"><a href="https://autogener8.com/contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero container">
+        <div>
+            <h1>Contact</h1><p>
+            <a href="mailto:info@autogener8.com" class="btn"> info@autogener8.com </a></p>
+                    </div>
+
+        <img src="./teacher.svg" alt="pic">
+    </section>
+
+    <!-- footer -->
+    <footer class="footer-distributed">
+
+        <div class="footer-right">
+
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+            <a href="#"><i class="fa fa-github"></i></a>
+
+        </div>
+
+        <div class="footer-left">
+
+<!--            <p class="footer-links">
+                <a class="link-1" href="#">Home</a>
+
+                <a href="#">Blog</a>
+
+                <a href="#">Pricing</a>
+
+                <a href="#">About</a>
+
+                <a href="#">Faq</a>
+
+                <a href="#">Contact</a>
+            </p>
+            
+-->
+
+            <p>AUTOGENER8 &copy; 2023</p>
+        </div>
+
+    </footer>
+    <script src="https://kit.fontawesome.com/2e73aee3d9.js" crossorigin="anonymous"></script>
+
+
+    <script>
+        const quill = new Quill('#editor', {
+            theme: 'snow'
+        });
+        const apiKey = document.querySelector('#api');
+        const form = document.getElementById('prompt-form');
+        const input = document.getElementById('prompt-input');
+        form.addEventListener('submit', event => {
+            event.preventDefault();
+            const prompt = input.value;
+            fetch(`https://api.openai.com/v1/completions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey.value}`
+                },
+                body: JSON.stringify({
+                    model: "text-davinci-003",
+                    prompt: prompt,
+                    temperature: 0.5,
+                    max_tokens: 100,
+                    top_p: 1,
+                    frequency_penalty: 0.5,
+                    presence_penalty: 0.5,
+                    echo: false
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const generatedText = data.choices[0].text;
+                    quill.insertText(quill.getLength(), generatedText);
+                })
+                .catch(error => {
+                    console.error('Error generating text:', error);
+                });
+        });
+    </script>
+
+
+    <script>
+        let navToggle = document.querySelector(".nav__toggle");
+        let navWrapper = document.querySelector(".nav__wrapper");
+
+        navToggle.addEventListener("click", function () {
+            if (navWrapper.classList.contains("active")) {
+                this.setAttribute("aria-expanded", "false");
+                this.setAttribute("aria-label", "menu");
+                navWrapper.classList.remove("active");
+            } else {
+                navWrapper.classList.add("active");
+                this.setAttribute("aria-label", "close menu");
+                this.setAttribute("aria-expanded", "true");
+            }
+        });
+
+    </script>
+</body>
+
+</html>
